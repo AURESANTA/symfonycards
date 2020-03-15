@@ -1,0 +1,53 @@
+
+{% block body %}
+
+    {% if cards is defined %}
+        <h1>{{ title }}</h1>
+    {% for card in cards %}
+
+        <div class="card" style="background-image: url('uploads/cards/{{card.image}}'); background-size: cover; background-repeat: no-repeat;background-position: center center;">
+
+            <div class="cardHeader">
+                <span>{{ card.cardname }} ({{ card.faction.factionname }})</span>
+            </div>
+            <div class="cardImage"></div>
+            <div class="cardFooter">
+                <div class="cardNumber" style="color:blue"> {{ card.attackpoints }} </div>
+                <div class="cardNumber" style="color:red"> {{ card.manacost }} </div>
+                <div class="cardNumber" style="color:green"> {{ card.lifepoints }} </div>
+            </div>
+        </div>
+
+        <a href="{{ path('edit_card', {'cardID': card.id}) }}">Modifier</a>
+        <a href="{{ path('delete_card', {'cardID': card.id}) }}">Supprimer</a>
+    {% endfor %}
+    {% endif %}
+
+    {% if factions is defined %}
+        <h1>{{ title }}</h1>
+    {% for faction in factions %}
+        <p>
+            {{ faction.factionname }}
+        </p>
+    {% endfor %}
+    {% endif %}
+
+    {% if passives is defined %}
+        <h1>{{ title }}</h1>
+        {% for passive in passives %}
+            <p>
+                {{ passive.passivename }}
+            </p>
+        {% endfor %}
+    {% endif %}
+
+    {% if decks is defined %}
+    <h1>{{ title }} de {{ app.user.email }}</h1>
+    {% for deck in decks %}
+        <p>
+            <a href="{{ path('show_deck', {'deckID': deck.id}) }}">{{ deck.deckname }}</a>
+        </p>
+    {% endfor %}
+    {% endif %}
+
+{% endblock %}

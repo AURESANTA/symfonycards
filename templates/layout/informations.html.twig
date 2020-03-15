@@ -1,0 +1,24 @@
+<div id="">
+    <div class="col-lg-12" id=''>
+        <div class="row">
+          <a href="{{ path('edit_deck', {'id': deck.id}) }}">Modifier</a>
+
+            {% for cardindeck in cardsInDeck %}
+                <div class="card" style="background-image: url('uploads/cards/{{cardindeck.card.image}}'); background-size: cover; background-repeat: no-repeat;background-position: center center;">
+
+                    <div class="cardHeader">
+                        <span>{{ cardindeck.card.cardname }} ({{ cardindeck.card.faction.factionname }})</span>
+                    </div>
+                    <div class="cardImage"></div>
+                    <div class="cardFooter">
+                        <div class="cardNumber" style="color:blue"> {{ cardindeck.card.attackpoints }} </div>
+                        <div class="cardNumber" style="color:red"> {{ cardindeck.card.manacost }} </div>
+                        <div class="cardNumber" style="color:green"> {{ cardindeck.card.lifepoints }} </div>
+                    </div>
+                </div>
+            {% else %}
+               Pas de cartes dans le deck !
+            {% endfor %}
+        </div>
+    </div>
+</div>

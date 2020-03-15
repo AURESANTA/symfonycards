@@ -1,0 +1,281 @@
+-- phpMyAdmin SQL Dump
+-- version 4.9.0.1
+-- https://www.phpmyadmin.net/
+--
+-- Hôte : localhost:8889
+-- Généré le :  Dim 15 mars 2020 à 22:19
+-- Version du serveur :  5.7.26
+-- Version de PHP :  7.3.8
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET time_zone = "+00:00";
+
+--
+-- Base de données :  `symfonyMarch`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `card`
+--
+
+CREATE TABLE `card` (
+  `id` int(11) NOT NULL,
+  `faction_id` int(11) DEFAULT NULL,
+  `creator_id` int(11) DEFAULT NULL,
+  `card_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `life_points` int(11) NOT NULL,
+  `attack_points` int(11) NOT NULL,
+  `mana_cost` int(11) NOT NULL,
+  `image` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `passive_id` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Déchargement des données de la table `card`
+--
+
+INSERT INTO `card` (`id`, `faction_id`, `creator_id`, `card_name`, `life_points`, `attack_points`, `mana_cost`, `image`, `passive_id`) VALUES
+(2, 1, 4, 'Test', 1, 1, 1, 'card-5e6e9bafce6e3.png', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `deck`
+--
+
+CREATE TABLE `deck` (
+  `id` int(11) NOT NULL,
+  `creator_id` int(11) DEFAULT NULL,
+  `deckname` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Déchargement des données de la table `deck`
+--
+
+INSERT INTO `deck` (`id`, `creator_id`, `deckname`) VALUES
+(1, 4, 'Deck de Aelter'),
+(2, 4, 'Deck de Test'),
+(3, 4, 'Deck Ultima');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `deckcard`
+--
+
+CREATE TABLE `deckcard` (
+  `id` int(11) NOT NULL,
+  `card_id` int(11) DEFAULT NULL,
+  `deck_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Déchargement des données de la table `deckcard`
+--
+
+INSERT INTO `deckcard` (`id`, `card_id`, `deck_id`) VALUES
+(7, 2, 1),
+(10, 2, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `faction`
+--
+
+CREATE TABLE `faction` (
+  `id` int(11) NOT NULL,
+  `faction_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Déchargement des données de la table `faction`
+--
+
+INSERT INTO `faction` (`id`, `faction_name`) VALUES
+(1, 'Horde'),
+(2, 'Alliance'),
+(3, 'Neutre'),
+(4, 'Beaux-Gosses');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `migration_versions`
+--
+
+CREATE TABLE `migration_versions` (
+  `version` varchar(14) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `executed_at` datetime NOT NULL COMMENT '(DC2Type:datetime_immutable)'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Déchargement des données de la table `migration_versions`
+--
+
+INSERT INTO `migration_versions` (`version`, `executed_at`) VALUES
+('20200304111303', '2020-03-04 11:13:12'),
+('20200305084558', '2020-03-05 08:46:07'),
+('20200306101618', '2020-03-06 10:16:29'),
+('20200309213101', '2020-03-09 21:31:23'),
+('20200315121607', '2020-03-15 12:16:11'),
+('20200315124107', '2020-03-15 12:41:23');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `passive`
+--
+
+CREATE TABLE `passive` (
+  `id` int(11) NOT NULL,
+  `passivename` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Déchargement des données de la table `passive`
+--
+
+INSERT INTO `passive` (`id`, `passivename`) VALUES
+(1, 'Quand il meurt, inflige 1 point de dégats à toutes les unités');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `user`
+--
+
+CREATE TABLE `user` (
+  `id` int(11) NOT NULL,
+  `email` varchar(180) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `roles` json NOT NULL,
+  `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Déchargement des données de la table `user`
+--
+
+INSERT INTO `user` (`id`, `email`, `roles`, `password`) VALUES
+(4, 'aurelien@gmail.com', '[]', '$2y$13$a2XLTmbBHhbom9/n8RGvQOfOohXASLdYyAtmoajrNgTqmb9H/a2yO');
+
+--
+-- Index pour les tables déchargées
+--
+
+--
+-- Index pour la table `card`
+--
+ALTER TABLE `card`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `IDX_161498D34448F8DA` (`faction_id`),
+  ADD KEY `IDX_161498D361220EA6` (`creator_id`),
+  ADD KEY `IDX_161498D36D157422` (`passive_id`);
+
+--
+-- Index pour la table `deck`
+--
+ALTER TABLE `deck`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `IDX_4FAC363761220EA6` (`creator_id`);
+
+--
+-- Index pour la table `deckcard`
+--
+ALTER TABLE `deckcard`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `IDX_BFDF6E0D4ACC9A20` (`card_id`),
+  ADD KEY `IDX_BFDF6E0D111948DC` (`deck_id`);
+
+--
+-- Index pour la table `faction`
+--
+ALTER TABLE `faction`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Index pour la table `migration_versions`
+--
+ALTER TABLE `migration_versions`
+  ADD PRIMARY KEY (`version`);
+
+--
+-- Index pour la table `passive`
+--
+ALTER TABLE `passive`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Index pour la table `user`
+--
+ALTER TABLE `user`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `UNIQ_8D93D649E7927C74` (`email`);
+
+--
+-- AUTO_INCREMENT pour les tables déchargées
+--
+
+--
+-- AUTO_INCREMENT pour la table `card`
+--
+ALTER TABLE `card`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT pour la table `deck`
+--
+ALTER TABLE `deck`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT pour la table `deckcard`
+--
+ALTER TABLE `deckcard`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
+-- AUTO_INCREMENT pour la table `faction`
+--
+ALTER TABLE `faction`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT pour la table `passive`
+--
+ALTER TABLE `passive`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT pour la table `user`
+--
+ALTER TABLE `user`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- Contraintes pour les tables déchargées
+--
+
+--
+-- Contraintes pour la table `card`
+--
+ALTER TABLE `card`
+  ADD CONSTRAINT `FK_161498D34448F8DA` FOREIGN KEY (`faction_id`) REFERENCES `faction` (`id`),
+  ADD CONSTRAINT `FK_161498D361220EA6` FOREIGN KEY (`creator_id`) REFERENCES `user` (`id`),
+  ADD CONSTRAINT `FK_161498D36D157422` FOREIGN KEY (`passive_id`) REFERENCES `passive` (`id`);
+
+--
+-- Contraintes pour la table `deck`
+--
+ALTER TABLE `deck`
+  ADD CONSTRAINT `FK_4FAC363761220EA6` FOREIGN KEY (`creator_id`) REFERENCES `user` (`id`);
+
+--
+-- Contraintes pour la table `deckcard`
+--
+ALTER TABLE `deckcard`
+  ADD CONSTRAINT `FK_BFDF6E0D111948DC` FOREIGN KEY (`deck_id`) REFERENCES `deck` (`id`),
+  ADD CONSTRAINT `FK_BFDF6E0D4ACC9A20` FOREIGN KEY (`card_id`) REFERENCES `card` (`id`);

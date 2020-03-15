@@ -1,0 +1,134 @@
+
+<nav class="navbar navbar-expand-lg navbar-light bg-dark">
+    <a class="navbar-brand nav-link" href="{{ path('home') }}">SymfoMarch</a>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="{{ path('add_card') }}">Ajouter une carte</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="{{ path('list_card') }}">Liste des cartes</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="{{ path('add_faction') }}">Ajouter une faction</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="{{ path('list_faction') }}">Liste des factions</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="{{ path('add_passive') }}">Ajouter un passif</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="{{ path('list_passive') }}">Liste des passifs</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="{{ path('add_deck') }}">Ajouter un deck</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="{{ path('list_deck') }}">Liste des decks</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="{{ path('app_register') }}">Créer un utilisateur</a>
+            </li>
+            {% if app.user %}
+                <li class="nav-item active">
+                    <a class="nav-link" style="color: orange" href="{{ path('app_logout') }}">Déconnexion</a>
+                </li>
+            {% else  %}
+                <li class="nav-item active">
+                    <a class="nav-link" style="float: right" href="{{ path('app_login') }}">Se connecter</a>
+                </li>
+            {% endif %}
+        </ul>
+    </div>
+</nav>
+
+<div class="loading">Loading
+    <div class="lds-ripple">
+        <div></div>
+        <div></div>
+        </div></div>
+<div id="pageContent"></div>
+
+{% block javascripts %}
+
+    <script type="text/javascript">
+
+    $(document).ready(function () {
+
+        // gestion de la navbar
+        $('.nav-link').click(function (e) {
+            e.preventDefault();
+            $('.nav-link').removeClass('select');
+            $(this).addClass('select');
+            $("#pageContent").load($(this).attr('href'), function() {
+                $(".loading").css('visibility','hidden');
+            });
+        });
+
+        // gestion des liens contenus dans le body
+        $('#pageContent').on('click', 'a', function (e) {
+            e.preventDefault();
+            $(".loading").css('visibility','visible');
+            $('#pageContent').load($(this).attr('href'), function() {
+                $(".loading").css('visibility','hidden');
+            });
+        });
+
+        // add une carte au deck
+        $('#pageContent').on('click','#cardsInStorage .card', function () {
+            let idCard = $(this).find('.idCard_add').val();
+            let idDeck = $(this).find('.idDeck_add').val();
+            $.ajax({
+                type: "GET",
+                url: "/adddeckcard/"+idCard+"/"+idDeck,
+                success: function success(response) {
+                    $("#pageContent").load("edit_deck/"+idDeck);
+                },
+                error:function(err){
+                }
+            });
+        });
+
+
+        // suppr une carte du deck
+        $('#pageContent').on('click','#cardsInDeckEdit .card', function () {
+            let idCardDeck = $(this).find('.idCardDeck_delete').val();
+            let idDeck = $(this).find('.idDeck_delete').val();
+            $(".loading").css('visibility','visible');
+            $.ajax({
+                type: "GET",
+                url: "/deletedeckcard/"+idCardDeck,
+                success: function success(response) {
+                    $("#pageContent").load("edit_deck/"+idDeck);
+                },
+                error:function(err){
+                }
+            });
+        });
+
+        // gestion des formulaires
+        $('#pageContent').on('submit', 'form', function (e) {
+            e.preventDefault();
+            $(".loading").css('visibility','visible');
+            var form = $(this);
+
+            $.ajax({
+                type: "POST",
+                url: form.attr('action'),
+                data: new FormData(this),
+                contentType: false,
+                processData: false,
+                success: function success(response) {
+                    $("#pageContent").load($('.select').attr('href'), function() {
+                        $(".loading").css('visibility','hidden');
+                    });
+                }
+            })
+        })
+    });
+
+    </script>
+
+{% endblock %}

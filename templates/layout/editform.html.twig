@@ -1,0 +1,13 @@
+
+<title>{{ title }}</title>
+
+{% block body %}
+
+{% if form is defined %}
+    <h1> {{ title }}</h1>
+    {{ form_start(form, { 'action': path(app.request.attributes.get("_route"), {cardID: card.id}), "method" : "POST", "enctype": "multipart/form-data"}) }}
+    {{ form_widget(form) }}
+    {{ form_end(form) }}
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,26 @@
+
+<title>{{ title }}</title>
+
+{% block body %}
+
+    {% if form is defined %}
+    <h1> {{ title }}</h1>
+    {{ form_start(form, { 'action': path(app.request.attributes.get("_route")), "method" : "POST", "enctype": "multipart/form-data"}) }}
+    {{ form_widget(form) }}
+    {{ form_end(form) }}
+    {% endif %}
+
+
+    {% if registrationForm is defined %}
+    <h1>Register</h1>
+
+    {{ form_start(registrationForm) }}
+    {{ form_row(registrationForm.email) }}
+    {{ form_row(registrationForm.plainPassword) }}
+    {{ form_row(registrationForm.agreeTerms) }}
+
+    <button class="btn">Register</button>
+    {{ form_end(registrationForm) }}
+    {% endif %}
+
+{% endblock %}
